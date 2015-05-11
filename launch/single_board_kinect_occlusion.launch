@@ -17,8 +17,11 @@
 		<!-- <param name="board_config" type="string" value="/home/radek/catkin_ws/src/kinect_io/data/chessboardinfo2_meters.yml"/> -->
 		
 
-		<param name="board_config" type="string" value="/home/radek/Downloads/aruco-1.2.5/build/utils_hrm/newboard.yml" />
-		<param name="dictionary" type="string" value="/home/radek/Downloads/aruco-1.2.5/build/utils_hrm/test_dict.yml" />
+		<param name="board_config" type="string" value="/home/radek/Downloads/aruco-1.2.5/build/utils_hrm/newboard.yml" />  
+		<!-- <param name="board_config" type="string" value="/home/radek/catkin_ws/src/kinect_io/data/final_board_meters.yml"/>-->
+		
+		<!-- <param name="dictionary" type="string" value="/home/radek/Downloads/aruco-1.2.5/build/utils_hrm/test_dict.yml" /> -->
+		<param name="dictionary" type="string" value="/home/radek/catkin_ws/src/kinect_io/data/final_dict.yml"/>
 
 		<param name="board_frame" type="string" value="/board1" />
 		<param name="draw_markers" type="bool" value="true" />

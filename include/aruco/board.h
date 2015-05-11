@@ -146,6 +146,8 @@ public:
      */
     void glGetModelViewMatrix(double modelview_matrix[16])throw(cv::Exception);
 
+    void getRtMatrix(cv::Mat& Rt);
+
     /**
      * Returns position vector and orientation quaternion for an Ogre scene node or entity.
      * 	Use:

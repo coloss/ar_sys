@@ -202,6 +202,36 @@ namespace aruco {
         }
 
 
+    } 
+
+    void Board::getRtMatrix(cv::Mat& Rt){ 
+        bool invalid=false;
+        for ( int i=0; i<3 && !invalid ; i++ ) {
+            if ( Tvec.at<float> ( i,0 ) !=-999999 ) invalid|=false;
+            if ( Rvec.at<float> ( i,0 ) !=-999999 ) invalid|=false;
+        }
+        if ( invalid ) throw cv::Exception ( 9002,"extrinsic parameters are not set","Marker::getModelViewMatrix",__FILE__,__LINE__ );
+        Mat Rot ( 3,3,CV_32FC1 ),Jacob;
+        Rodrigues ( Rvec, Rot, Jacob );
+
+        double para[3][4];
+        //cout << "para: " << endl;
+        for ( int i=0; i<3; i++ ){
+            for ( int j=0; j<3; j++ ) {para[i][j]=Rot.at<float> ( i,j ); /*cout << para[i][j] << " " ;*/}
+            cout << endl;
+        }
+        //now, add the translation
+        para[0][3]=Tvec.at<float> ( 0,0 );
+        para[1][3]=Tvec.at<float> ( 1,0 );
+        para[2][3]=Tvec.at<float> ( 2,0 );
+        double scale=1;
+
+        Rt = cv::Mat::zeros(3,4, CV_32FC1); //Mat(3, 4, CV_32FC1, para).clone();
+         for ( int i=0; i<3; i++ ){
+            for ( int j=0; j<4; j++ )  { 
+                Rt.at<float>(i,j) = para[i][j];
+            } 
+        }
     }
 
 
