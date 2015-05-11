@@ -22,6 +22,11 @@
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
 
+#include <std_msgs/MultiArrayLayout.h>
+#include <std_msgs/MultiArrayDimension.h>
+ 
+#include <std_msgs/Float32MultiArray.h>
+
 using namespace aruco;
 
 class ArSysSingleBoard
@@ -45,6 +50,7 @@ class ArSysSingleBoard
 		ros::Publisher pose_pub;
 		ros::Publisher transform_pub; 
 		ros::Publisher position_pub;
+		ros::Publisher modelView_pub;
 		std::string board_frame;
 
 		double marker_size;
@@ -64,6 +70,8 @@ class ArSysSingleBoard
 		{
 			image_sub = it.subscribe("/image", 1, &ArSysSingleBoard::image_callback, this);
 			cam_info_sub = nh.subscribe("/camera_info", 1, &ArSysSingleBoard::cam_info_callback, this);
+
+			modelView_pub = nh.advertise<std_msgs::Float32MultiArray>("modelview",5);
 
 			image_pub = it.advertise("result", 1);
 			debug_pub = it.advertise("debug", 1);
@@ -99,7 +107,7 @@ class ArSysSingleBoard
 				//detection results will go into "markers"
 				markers.clear();
 				//Ok, let's detect
-				mDetector.detect(inImage, markers, camParam, marker_size, false);
+				mDetector.detect(inImage, markers);//, camParam, marker_size, false);
 				//Detection of the board
 				float probDetect=the_board_detector.detect(markers, the_board_config, the_board_detected, camParam, marker_size);
 				if (probDetect > 0.0)
@@ -122,6 +130,20 @@ class ArSysSingleBoard
 					positionMsg.header = transformMsg.header;
 					positionMsg.vector = transformMsg.transform.translation;
 					position_pub.publish(positionMsg);
+
+					// PUBLISH MODELVIEW MATRIX
+					std_msgs::Float32MultiArray array;
+					array.data.clear();
+
+					double modelview[16];
+					the_board_detected.glGetModelViewMatrix(modelview);
+
+					for(int k=0; k<16; k++){ 
+						array.data.push_back(modelview[k]);
+					}
+
+					modelView_pub.publish(array);
+
 				}
 				//for each marker, draw info and its boundaries in the image
 				for(size_t i=0; draw_markers && i < markers.size(); ++i)

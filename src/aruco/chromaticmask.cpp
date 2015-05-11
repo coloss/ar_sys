@@ -148,6 +148,7 @@ void ChromaticMask::setParams(unsigned int mc, unsigned int nc, double threshPro
   _threshProb = threshProb;
   _cell_neighbours.resize(mc*nc);
   int idx_=0;
+  //cout << "STD PRINTING!!" << endl;
   //SGJ: revisar, no engo claro sepa bien que es i y j y los puedo estar confundiendo!!!
     for(unsigned int j=0; j<nc; j++)
       for(unsigned int i=0; i<mc; i++,idx_++) {
@@ -159,7 +160,7 @@ void ChromaticMask::setParams(unsigned int mc, unsigned int nc, double threshPro
 	}      
       }
     }
-  
+  //cout << "STD PRINTING!!" << endl;
     //deterimne the idx of the neighbours
   _BD.getMarkerDetector().setThresholdParams(35,7);
   _BD.getMarkerDetector().enableErosion(false);
@@ -170,13 +171,15 @@ void ChromaticMask::setParams(unsigned int mc, unsigned int nc, double threshPro
   
   _objCornerPoints = corners;
   _CP = CP;
-  
+  //cout << "STD PRINTING!!" << endl;
   _pixelsVector.clear();
   for(unsigned int i=0; i<CP.CamSize.height/2; i++)
     for(unsigned int j=0; j<CP.CamSize.width/2; j++)
       _pixelsVector.push_back( cv::Point2f(2*j,2*i) );
   
+  //cout << "STD PRINTING!!" << endl;
   resetMask();
+  //cout << "cam size: " << CP.CamSize.height << " " << CP.CamSize.width << endl;
   _cellMap = cv::Mat(CP.CamSize.height, CP.CamSize.width, CV_8UC1, cv::Scalar::all(0));
   _canonicalPos = cv::Mat(CP.CamSize.height, CP.CamSize.width, CV_8UC2);
     
@@ -444,7 +447,6 @@ void ChromaticMask::update(const cv::Mat& in)
 
 void ChromaticMask::resetMask()
 {
-  
   _mask.create(_CP.CamSize.height, _CP.CamSize.width, CV_8UC1); 
   _mask.setTo(cv::Scalar::all(0));
 }

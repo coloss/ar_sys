@@ -43,6 +43,11 @@ add_library(aruco
 	src/aruco/markerdetector.cpp
 	src/aruco/ar_omp.cpp
 	src/aruco/subpixelcorner.cpp
+	### ADDED BY ME - highly reliable markers 	
+	src/aruco/highlyreliablemarkers.cpp
+	src/aruco/chromaticmask.cpp
+
+
 )
 target_link_libraries(aruco ${catkin_LIBRARIES})
 
@@ -50,6 +55,13 @@ add_executable(single_board src/single_board.cpp
 	src/utils.cpp)
 add_dependencies(single_board ${catkin_EXPORTED_TARGETS})
 target_link_libraries(single_board aruco ${catkin_LIBRARIES})
+
+### ADDED BY ME - OCCLUSION
+add_executable(single_board_occlusion src/single_board_occlusion.cpp
+	src/utils.cpp)
+add_dependencies(single_board_occlusion ${catkin_EXPORTED_TARGETS})
+target_link_libraries(single_board_occlusion aruco ${catkin_LIBRARIES})
+### END ADDED BY ME
 
 add_executable(multi_boards src/multi_boards.cpp
 	src/utils.cpp)

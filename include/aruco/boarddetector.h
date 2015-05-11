@@ -133,6 +133,7 @@ public:
     void set_repj_err_thres(float Repj_err_thres){repj_err_thres=Repj_err_thres;}
     float get_repj_err_thres  ( )const {return repj_err_thres;}
     
+    vector<Marker> _vmarkers;
     
 private:
     void rotateXAxis(cv::Mat &rotation);
@@ -145,7 +146,7 @@ private:
     float _markerSize,repj_err_thres;
     CameraParameters _camParams;
     MarkerDetector _mdetector;//internal markerdetector
-    vector<Marker> _vmarkers;//markers detected in the call to : float  detect(const cv::Mat &im);
+    //markers detected in the call to : float  detect(const cv::Mat &im);
     
 };
 
