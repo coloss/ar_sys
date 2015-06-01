@@ -66,6 +66,7 @@ class ArSysSingleBoard
 		image_transport::Publisher occlusion_mask_pub;
 		image_transport::Publisher debug_pub;
 		image_transport::Publisher Rt_pub;
+		image_transport::Publisher K_pub;
 		ros::Publisher pose_pub;
 		ros::Publisher transform_pub; 
 		ros::Publisher position_pub;
@@ -107,6 +108,7 @@ class ArSysSingleBoard
 			debug_pub = it.advertise("debug", 1);
 			occlusion_mask_pub = it.advertise("occlusion_mask", 1); // ADDED BY ME
 			Rt_pub = it.advertise("Rt",1);
+			K_pub = it.advertise("K",1);
 			pose_pub = nh.advertise<geometry_msgs::PoseStamped>("pose", 100);
 			transform_pub = nh.advertise<geometry_msgs::TransformStamped>("transform", 100);
 			position_pub = nh.advertise<geometry_msgs::Vector3Stamped>("position", 100);
@@ -350,6 +352,21 @@ class ArSysSingleBoard
 					//cout << Rt << endl;
 					Rt_msg.image = Rt;
 					Rt_pub.publish(Rt_msg.toImageMsg());
+				}
+
+				if(K_pub.getNumSubscribers() > 0)
+				{
+					//show input with augmented information
+					cv_bridge::CvImage K_msg;
+					K_msg.header.frame_id = msg->header.frame_id;
+					K_msg.header.stamp = msg->header.stamp;
+					K_msg.encoding = sensor_msgs::image_encodings::TYPE_32FC1;
+					//Mat K;
+					//the_board_detected.getRtMatrix(Rt);
+					//cout << "Rt:" << endl;
+					//cout << Rt << endl;
+					K_msg.image = camParam.CameraMatrix;
+					K_pub.publish(K_msg.toImageMsg());
 				}
 
 				// END ADDED BY ME

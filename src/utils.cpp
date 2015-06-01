@@ -18,7 +18,7 @@ aruco::CameraParameters ar_sys::getCamParams(const sensor_msgs::CameraInfo& cam_
 	cv::Mat cameraMatrix(3, 3, CV_32FC1);
 	cv::Mat distorsionCoeff(4, 1, CV_32FC1);
 	cv::Size size(cam_info.height, cam_info.width);
-
+	cout << "useRectified: " << useRectifiedParameters << endl;
 	if ( useRectifiedParameters )
 	{
 		cameraMatrix.setTo(0);

@@ -49,6 +49,7 @@ class ArSysSingleBoard
 		image_transport::Publisher image_pub;
 		image_transport::Publisher debug_pub;
 		image_transport::Publisher Rt_pub;
+		image_transport::Publisher K_pub;
 		ros::Publisher pose_pub;
 		ros::Publisher transform_pub; 
 		ros::Publisher position_pub;
@@ -82,6 +83,7 @@ class ArSysSingleBoard
 			transform_pub = nh.advertise<geometry_msgs::TransformStamped>("transform", 100);
 			position_pub = nh.advertise<geometry_msgs::Vector3Stamped>("position", 100);
 			Rt_pub = it.advertise("Rt",1);
+			K_pub = it.advertise("K",1);
 
 			nh.param<double>("marker_size", marker_size, 0.05);
 			nh.param<std::string>("board_config", board_config, "boardConfiguration.yml");
@@ -204,6 +206,23 @@ class ArSysSingleBoard
 					Rt_msg.image = Rt;
 					Rt_pub.publish(Rt_msg.toImageMsg());
 				}
+
+
+				if(K_pub.getNumSubscribers() > 0)
+				{
+					//show input with augmented information
+					cv_bridge::CvImage K_msg;
+					K_msg.header.frame_id = msg->header.frame_id;
+					K_msg.header.stamp = msg->header.stamp;
+					K_msg.encoding = sensor_msgs::image_encodings::TYPE_32FC1;
+					//Mat K;
+					//the_board_detected.getRtMatrix(Rt);
+					//cout << "Rt:" << endl;
+					//cout << Rt << endl;
+					K_msg.image = camParam.CameraMatrix;
+					K_pub.publish(K_msg.toImageMsg());
+				}
+
 			}
 			catch (cv_bridge::Exception& e)
 			{

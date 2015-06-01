@@ -218,7 +218,7 @@ namespace aruco {
         //cout << "para: " << endl;
         for ( int i=0; i<3; i++ ){
             for ( int j=0; j<3; j++ ) {para[i][j]=Rot.at<float> ( i,j ); /*cout << para[i][j] << " " ;*/}
-            cout << endl;
+            //cout << endl;
         }
         //now, add the translation
         para[0][3]=Tvec.at<float> ( 0,0 );
